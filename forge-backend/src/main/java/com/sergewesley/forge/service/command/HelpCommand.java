@@ -1,12 +1,20 @@
 package com.sergewesley.forge.service.command;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class HelpCommand implements Command {
 
-    // Dynamic help deferred closer to Strategy Pattern cleanup.
-    // For now, static help string.
+    private final List<Command> commands;
+
+    // Use @Lazy to break circular dependency: CommandEngine -> HelpCommand ->
+    // CommandEngine (via list)
+    public HelpCommand(@Lazy List<Command> commands) {
+        this.commands = commands;
+    }
 
     @Override
     public String getName() {
@@ -15,7 +23,15 @@ public class HelpCommand implements Command {
 
     @Override
     public String execute(String args) {
-        return "Available Server Commands:\n - status\n - echo <text>\n - server-help";
+        StringBuilder sb = new StringBuilder("Available Server Commands:\n");
+        for (Command cmd : commands) {
+            sb.append(" - ").append(cmd.getName());
+            if (cmd.getDescription() != null && !cmd.getDescription().isEmpty()) {
+                sb.append(": ").append(cmd.getDescription());
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     @Override
