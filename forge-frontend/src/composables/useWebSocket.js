@@ -7,7 +7,7 @@ export function useWebSocket(onMessageReceived, onConnected) {
 
   const connect = () => {
     client.value = new Client({
-      brokerURL: 'ws://localhost:8080/ws',
+      brokerURL: import.meta.env.VITE_WS_URL,
       onConnect: () => {
         isConnected.value = true;
         if (onConnected) onConnected();
