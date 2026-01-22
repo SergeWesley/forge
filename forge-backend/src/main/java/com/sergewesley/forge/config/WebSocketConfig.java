@@ -28,9 +28,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                             org.springframework.web.socket.WebSocketHandler wsHandler,
                             java.util.Map<String, Object> attributes) {
                         return new java.security.Principal() {
+                            private final String name = java.util.UUID.randomUUID().toString();
+
                             @Override
                             public String getName() {
-                                return java.util.UUID.randomUUID().toString();
+                                return this.name;
                             }
                         };
                     }
