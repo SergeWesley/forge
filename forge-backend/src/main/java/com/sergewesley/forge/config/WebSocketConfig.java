@@ -12,12 +12,28 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/topic", "/queue"); // Added /queue for user destinations
         config.setApplicationDestinationPrefixes("/app");
+        config.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOrigins("*");
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins("*")
+                .setHandshakeHandler(new org.springframework.web.socket.server.support.DefaultHandshakeHandler() {
+                    @Override
+                    protected java.security.Principal determineUser(
+                            org.springframework.http.server.ServerHttpRequest request,
+                            org.springframework.web.socket.WebSocketHandler wsHandler,
+                            java.util.Map<String, Object> attributes) {
+                        return new java.security.Principal() {
+                            @Override
+                            public String getName() {
+                                return java.util.UUID.randomUUID().toString();
+                            }
+                        };
+                    }
+                });
     }
 }

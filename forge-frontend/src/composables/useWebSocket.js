@@ -1,5 +1,5 @@
-import { Client } from '@stomp/stompjs';
-import { ref } from 'vue';
+import { Client } from "@stomp/stompjs";
+import { ref } from "vue";
 
 export function useWebSocket(onMessageReceived, onConnected) {
   const client = ref(null);
@@ -11,8 +11,8 @@ export function useWebSocket(onMessageReceived, onConnected) {
       onConnect: () => {
         isConnected.value = true;
         if (onConnected) onConnected();
-        
-        client.value.subscribe('/topic/terminal', (message) => {
+
+        client.value.subscribe("/user/queue/terminal", (message) => {
           if (message.body) {
             const response = JSON.parse(message.body);
             onMessageReceived(response.output);
@@ -23,8 +23,8 @@ export function useWebSocket(onMessageReceived, onConnected) {
         isConnected.value = false;
       },
       onWebSocketClose: () => {
-          isConnected.value = false;
-      }
+        isConnected.value = false;
+      },
     });
 
     client.value.activate();
@@ -33,11 +33,11 @@ export function useWebSocket(onMessageReceived, onConnected) {
   const sendCommand = (command) => {
     if (client.value && client.value.connected) {
       client.value.publish({
-        destination: '/app/command',
+        destination: "/app/command",
         body: JSON.stringify({ command: command }),
       });
     } else {
-      console.error('WebSocket is not connected.');
+      console.error("WebSocket is not connected.");
     }
   };
 
@@ -51,6 +51,6 @@ export function useWebSocket(onMessageReceived, onConnected) {
     connect,
     disconnect,
     sendCommand,
-    isConnected
+    isConnected,
   };
 }
