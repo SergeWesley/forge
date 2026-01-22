@@ -9,4 +9,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CommandResponse {
     private String output;
+    private String type = "info";
+
+    public CommandResponse(String output) {
+        this.output = output;
+        this.type = "info";
+    }
 }

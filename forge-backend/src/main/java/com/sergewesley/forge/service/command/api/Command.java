@@ -1,4 +1,4 @@
-package com.sergewesley.forge.service.command;
+package com.sergewesley.forge.service.command.api;
 
 public interface Command {
     String getName();

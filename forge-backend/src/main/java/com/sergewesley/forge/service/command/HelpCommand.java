@@ -1,5 +1,6 @@
 package com.sergewesley.forge.service.command;
 
+import com.sergewesley.forge.service.command.api.Command;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 

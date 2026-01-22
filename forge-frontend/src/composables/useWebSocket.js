@@ -1,7 +1,7 @@
 import { Client } from "@stomp/stompjs";
 import { ref } from "vue";
 
-export function useWebSocket(onMessageReceived, onConnected) {
+export function useWebSocket(onMessageReceived, onConnected, onTypingReceived) {
   const client = ref(null);
   const isConnected = ref(false);
 
@@ -16,6 +16,16 @@ export function useWebSocket(onMessageReceived, onConnected) {
           if (message.body) {
             const response = JSON.parse(message.body);
             onMessageReceived(response.output);
+          }
+        });
+
+        // Subscribe to typing events
+        client.value.subscribe("/user/queue/typing", (message) => {
+          if (message.body) {
+            const typingData = JSON.parse(message.body);
+            if (onTypingReceived) {
+              onTypingReceived(typingData.text);
+            }
           }
         });
       },
@@ -41,6 +51,15 @@ export function useWebSocket(onMessageReceived, onConnected) {
     }
   };
 
+  const sendTyping = (currentText) => {
+    if (client.value && client.value.connected) {
+      client.value.publish({
+        destination: "/app/typing",
+        body: JSON.stringify({ currentText: currentText }),
+      });
+    }
+  };
+
   const disconnect = () => {
     if (client.value) {
       client.value.deactivate();
@@ -51,6 +70,7 @@ export function useWebSocket(onMessageReceived, onConnected) {
     connect,
     disconnect,
     sendCommand,
+    sendTyping,
     isConnected,
   };
 }

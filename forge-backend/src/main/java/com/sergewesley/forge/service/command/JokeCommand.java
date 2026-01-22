@@ -1,5 +1,5 @@
 package com.sergewesley.forge.service.command;
-
+import com.sergewesley.forge.service.command.api.Command;
 import com.sergewesley.forge.external.chucknorris.ChuckNorrisService;
 import org.springframework.stereotype.Component;
 
