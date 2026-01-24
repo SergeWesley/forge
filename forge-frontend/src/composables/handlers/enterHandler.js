@@ -1,4 +1,4 @@
-import { executeLocalCommand } from '../localCommands';
+import { executeLocalCommand } from "../processors/localCommandProcessor";
 
 export function handleEnter({ term, commandBuffer, history, historyIndex, onCommand }) {
   term.write('\r\n');

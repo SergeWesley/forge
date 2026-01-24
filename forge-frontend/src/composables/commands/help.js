@@ -1,4 +1,4 @@
-import { localCommands } from '../localCommands';
+import { localCommands } from "../processors/localCommandProcessor";
 
 export const help = (term) => {
   term.writeln('Available commands:');

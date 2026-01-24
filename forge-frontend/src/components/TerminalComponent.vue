@@ -5,6 +5,7 @@ import { FitAddon } from "xterm-addon-fit";
 import "xterm/css/xterm.css";
 import { useTerminalInput } from "../composables/useTerminalInput";
 import { useWebSocket } from "../composables/useWebSocket";
+import { ModeManager } from "../composables/modes/ModeManager";
 
 const terminalContainer = ref(null);
 let term = null;
@@ -108,8 +109,14 @@ onMounted(() => {
 
   const { handleInput } = useTerminalInput(term, handleCommand);
 
-  // Override onData to capture typing
+  // Override onData to handle modes and normal input
   term.onData((data) => {
+    // Check if a mode (like Snake) is active - delegate all input to it
+    if (ModeManager.isActive()) {
+      ModeManager.handleInput(data);
+      return; // Don't process normally
+    }
+
     const code = data.charCodeAt(0);
 
     // Handle input normally
