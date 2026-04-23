@@ -12,7 +12,7 @@
 	<artifactId>forge</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>forge</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Forge</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -68,6 +68,12 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+	    <dependency>
+	        <groupId>org.springdoc</groupId>
+	        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+	        <version>3.0.2</version>
+	    </dependency>
 	</dependencies>
 
 	<build>

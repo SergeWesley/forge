@@ -5,9 +5,11 @@ import com.sergewesley.forge.dto.openmeteo.WeatherResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class OpenMeteoService {
 
@@ -26,12 +28,13 @@ public class OpenMeteoService {
                 .toUriString();
 
         try {
+            log.info("Recherche des coordonnées pour la ville : {}", cityName);
             GeoResultResponse response = restTemplate.getForObject(url, GeoResultResponse.class);
             if (response != null && response.getResults() != null && !response.getResults().isEmpty()) {
                 return Optional.of(response.getResults().get(0));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Erreur lors de la recherche de la ville : " + cityName, e);
         }
         return Optional.empty();
     }
@@ -44,12 +47,13 @@ public class OpenMeteoService {
                 .toUriString();
 
         try {
+            log.info("Récupération de la météo pour les coordonnées ({}, {})", latitude, longitude);
             WeatherResponse response = restTemplate.getForObject(url, WeatherResponse.class);
             if (response != null && response.getCurrentWeather() != null) {
                 return Optional.of(response.getCurrentWeather());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Erreur lors de la récupération de la météo", e);
         }
         return Optional.empty();
     }
