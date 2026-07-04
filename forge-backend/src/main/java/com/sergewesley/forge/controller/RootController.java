@@ -1,0 +1,15 @@
+package com.sergewesley.forge.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.view.RedirectView;
+
+@Controller
+public class RootController {
+
+    @GetMapping("/")
+    public RedirectView redirectToSwagger() {
+        // Redirige la racine vers notre interface Swagger (/api)
+        return new RedirectView("/api");
+    }
+}
