@@ -11,8 +11,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import com.sergewesley.forge.exception.ExternalServiceException;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/jokes")
 @Tag(name = "Chuck Norris API", description = "api.chuck.tag.description")
@@ -29,9 +27,9 @@ public class ChuckNorrisController {
     @GetMapping("/random")
     @Operation(summary = "api.chuck.get.summary", description = "api.chuck.get.desc")
     public ResponseEntity<String> getRandomJoke() {
-        Optional<String> jokeOpt = chuckNorrisService.getRandomJoke();
 
-        return jokeOpt.map(ResponseEntity::ok)
+        return chuckNorrisService.getRandomJoke()
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> {
                     String errorMessage = messageSource.getMessage("error.joke.unavailable", null,
                             LocaleContextHolder.getLocale());
