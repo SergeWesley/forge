@@ -4,6 +4,8 @@ import com.sergewesley.forge.dto.jikan.JikanAnimeResponse;
 import com.sergewesley.forge.exception.ExternalServiceException;
 import com.sergewesley.forge.external.jikan.JikanService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.extensions.Extension;
+import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -26,7 +28,12 @@ public class AnimeController {
     }
 
     @GetMapping("/random")
-    @Operation(summary = "api.anime.get.summary", description = "api.anime.get.desc")
+    @Operation(
+        summary = "api.anime.get.summary", 
+        description = "api.anime.get.desc",
+        tags = {"Generative UI"},
+        extensions = {@Extension(name = "x-generative-ui", properties = {@ExtensionProperty(name = "enabled", value = "true")})}
+    )
     public ResponseEntity<JikanAnimeResponse.AnimeData> getRandomAnime() {
         return jikanService.getRandomAnime()
                 .map(ResponseEntity::ok)
