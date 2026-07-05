@@ -4,6 +4,8 @@ import com.sergewesley.forge.external.openmeteo.OpenMeteoService;
 import com.sergewesley.forge.dto.openmeteo.GeoResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.extensions.Extension;
+import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +31,9 @@ public class WeatherController {
     }
 
     @GetMapping
-    @Operation(summary = "api.weather.get.summary", description = "api.weather.get.desc")
+    @Operation(summary = "api.weather.get.summary", description = "api.weather.get.desc", tags = {
+            "Generative UI" }, extensions = { @Extension(name = "x-generative-ui", properties = {
+                    @ExtensionProperty(name = "enabled", value = "true") }) })
     public ResponseEntity<?> getWeather(
             @Parameter(description = "api.weather.param.city", required = true, example = "Paris") @RequestParam String city) {
 

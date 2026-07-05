@@ -33,16 +33,16 @@ Backend du projet **Forge**, un terminal interactif en temps réel accessible vi
 
 ## Stack technique
 
-| Technologie | Version | Rôle |
-|---|---|---|
-| **Java** | 21 | Langage |
-| **Spring Boot** | 4.0.1 | Framework applicatif |
-| **Spring WebSocket** | — | Communication temps réel (STOMP) |
-| **Spring Validation** | — | Validation des données |
-| **Jackson** | — | Sérialisation/désérialisation JSON |
-| **Lombok** | — | Réduction du boilerplate |
-| **Maven** | — | Gestion des dépendances & build |
-| **Docker** | — | Conteneurisation |
+| Technologie           | Version | Rôle                               |
+| --------------------- | ------- | ---------------------------------- |
+| **Java**              | 21      | Langage                            |
+| **Spring Boot**       | 4.0.1   | Framework applicatif               |
+| **Spring WebSocket**  | —       | Communication temps réel (STOMP)   |
+| **Spring Validation** | —       | Validation des données             |
+| **Jackson**           | —       | Sérialisation/désérialisation JSON |
+| **Lombok**            | —       | Réduction du boilerplate           |
+| **Maven**             | —       | Gestion des dépendances & build    |
+| **Docker**            | —       | Conteneurisation                   |
 
 ---
 
@@ -85,15 +85,15 @@ Le `CommandEngine` utilise un pattern **Command** avec auto-discovery : toutes l
 
 ## Commandes disponibles
 
-| Commande | Description | Exemple |
-|---|---|---|
-| `echo` | Renvoie le texte passé en argument | `echo Hello World` |
-| `weather` | Affiche la météo actuelle d'une ville | `weather Paris` |
-| `joke` | Affiche une blague Chuck Norris | `joke` |
-| `status` | Affiche le statut du serveur | `status` |
-| `chat-start` | Crée un salon de chat | `chat-start` |
-| `chat-join` | Rejoint un salon par code | `chat-join AB12` |
-| `server-help` | Liste toutes les commandes disponibles | `server-help` |
+| Commande      | Description                            | Exemple            |
+| ------------- | -------------------------------------- | ------------------ |
+| `echo`        | Renvoie le texte passé en argument     | `echo Hello World` |
+| `weather`     | Affiche la météo actuelle d'une ville  | `weather Paris`    |
+| `joke`        | Affiche une blague Chuck Norris        | `joke`             |
+| `status`      | Affiche le statut du serveur           | `status`           |
+| `chat-start`  | Crée un salon de chat                  | `chat-start`       |
+| `chat-join`   | Rejoint un salon par code              | `chat-join AB12`   |
+| `server-help` | Liste toutes les commandes disponibles | `server-help`      |
 
 ---
 
@@ -140,6 +140,7 @@ docker run -p 8080:8080 forge-backend
 ```
 
 Le `Dockerfile` utilise un **multi-stage build** :
+
 1. **Build stage** — Maven + JDK 21 pour compiler le projet
 2. **Run stage** — JRE 21 Alpine pour une image légère
 
