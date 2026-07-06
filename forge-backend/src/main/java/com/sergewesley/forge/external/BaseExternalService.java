@@ -2,6 +2,9 @@ package com.sergewesley.forge.external;
 
 import org.slf4j.Logger;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClientResponseException;
+import com.sergewesley.forge.exception.ExternalServiceRateLimitException;
+import com.sergewesley.forge.exception.ExternalServiceException;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -43,8 +46,21 @@ public abstract class BaseExternalService {
                     return Optional.of(mappedData);
                 }
             }
+        } catch (RestClientResponseException e) {
+            logger.error("{} - Status: {}, Response: {}", logErrorMessage, e.getStatusCode(), e.getResponseBodyAsString(), e);
+            if (e.getStatusCode().value() == 429) {
+                throw new ExternalServiceRateLimitException("error.detail.ratelimit");
+            }
+            if (e.getStatusCode().value() == 404) {
+                // Pour les ressources non trouvées, on renvoie un Optional vide
+                // afin que le contrôleur gère son propre ResourceNotFoundException
+                return Optional.empty();
+            }
+            // Fail-fast sur les autres erreurs HTTP (5xx, 4xx non gérés)
+            throw new ExternalServiceException(logErrorMessage + " : " + e.getMessage(), e);
         } catch (Exception e) {
             logger.error(logErrorMessage, e);
+            throw new ExternalServiceException(logErrorMessage + " : " + e.getMessage(), e);
         }
         return Optional.empty();
     }

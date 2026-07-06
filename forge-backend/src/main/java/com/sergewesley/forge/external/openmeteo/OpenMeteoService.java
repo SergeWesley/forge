@@ -22,18 +22,19 @@ public class OpenMeteoService extends BaseExternalService {
         String url = UriComponentsBuilder.fromUriString("https://geocoding-api.open-meteo.com/v1/search")
                 .queryParam("name", cityName)
                 .queryParam("count", 1)
-                .queryParam("language", "en")
+                .queryParam("language", "fr")
                 .queryParam("format", "json")
                 .toUriString();
 
         return executeGetCall(
                 url,
                 GeoResultResponse.class,
-                response -> (response.getResults() != null && !response.getResults().isEmpty()) ? response.getResults().get(0) : null,
+                response -> (response.getResults() != null && !response.getResults().isEmpty())
+                        ? response.getResults().get(0)
+                        : null,
                 "Recherche des coordonnées pour la ville : " + cityName,
                 "Erreur lors de la recherche de la ville : " + cityName,
-                log
-        );
+                log);
     }
 
     public Optional<WeatherResponse.CurrentWeather> getWeather(double latitude, double longitude) {
@@ -49,7 +50,6 @@ public class OpenMeteoService extends BaseExternalService {
                 WeatherResponse::getCurrentWeather,
                 String.format("Récupération de la météo pour les coordonnées (%s, %s)", latitude, longitude),
                 "Erreur lors de la récupération de la météo",
-                log
-        );
+                log);
     }
 }

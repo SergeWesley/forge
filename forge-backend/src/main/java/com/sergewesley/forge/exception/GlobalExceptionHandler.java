@@ -27,7 +27,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ExternalServiceException.class)
     public ProblemDetail handleExternalServiceException(ExternalServiceException ex) {
         // Renvoie un 503 (Service Unavailable) car le service externe est indisponible
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+        String detailMessage = messageSource.getMessage("error.detail.externalservice", null, LocaleContextHolder.getLocale());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, detailMessage);
         problemDetail.setTitle(
                 messageSource.getMessage("error.title.externalservice", null, LocaleContextHolder.getLocale()));
         return problemDetail;
@@ -39,6 +40,15 @@ public class GlobalExceptionHandler {
                 LocaleContextHolder.getLocale());
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, detailMessage);
         problemDetail.setTitle(messageSource.getMessage("error.title.notfound", null, LocaleContextHolder.getLocale()));
+        return problemDetail;
+    }
+
+    @ExceptionHandler(ExternalServiceRateLimitException.class)
+    public ProblemDetail handleExternalServiceRateLimitException(ExternalServiceRateLimitException ex) {
+        String detailMessage = messageSource.getMessage("error.detail.ratelimit", null, ex.getMessage(), LocaleContextHolder.getLocale());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.TOO_MANY_REQUESTS, detailMessage);
+        problemDetail.setTitle(
+                messageSource.getMessage("error.title.ratelimit", null, LocaleContextHolder.getLocale()));
         return problemDetail;
     }
 }
