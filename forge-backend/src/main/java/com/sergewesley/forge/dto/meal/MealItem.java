@@ -10,7 +10,4 @@ public record MealItem(
         String instructions,
         String imageUrl,
         String youtubeUrl,
-        List<Ingredient> ingredients
-) {
-    public record Ingredient(String name, String measure) {}
-}
+        List<Ingredient> ingredients) {}

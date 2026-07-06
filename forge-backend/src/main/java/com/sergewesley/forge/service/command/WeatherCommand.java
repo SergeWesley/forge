@@ -1,11 +1,11 @@
 package com.sergewesley.forge.service.command;
-import com.sergewesley.forge.service.command.api.Command;
+
 import com.sergewesley.forge.dto.openmeteo.GeoResultResponse;
 import com.sergewesley.forge.dto.openmeteo.WeatherResponse;
 import com.sergewesley.forge.external.openmeteo.OpenMeteoService;
-import org.springframework.stereotype.Component;
-
+import com.sergewesley.forge.service.command.api.Command;
 import java.util.Optional;
+import org.springframework.stereotype.Component;
 
 @Component
 public class WeatherCommand implements Command {
@@ -38,19 +38,20 @@ public class WeatherCommand implements Command {
         GeoResultResponse.GeoLocation location = locationOpt.get();
 
         // 2. Fetch Weather
-        Optional<WeatherResponse.CurrentWeather> weatherOpt = openMeteoService.getWeather(location.getLatitude(),
-                location.getLongitude());
+        Optional<WeatherResponse.CurrentWeather> weatherOpt =
+                openMeteoService.getWeather(location.latitude(), location.longitude());
         if (weatherOpt.isEmpty()) {
-            return "Could not retrieve weather data for " + location.getName();
+            return "Could not retrieve weather data for " + location.name();
         }
 
         WeatherResponse.CurrentWeather weather = weatherOpt.get();
 
-        return String.format("Weather in %s, %s:\nTemperature: %.1f°C\nWind Speed: %.1f km/h",
-                location.getName(),
-                location.getCountry() != null ? location.getCountry() : "",
-                weather.getTemperature(),
-                weather.getWindspeed());
+        return String.format(
+                "Weather in %s, %s:\nTemperature: %.1f°C\nWind Speed: %.1f km/h",
+                location.name(),
+                location.country() != null ? location.country() : "",
+                weather.temperature(),
+                weather.windspeed());
     }
 
     @Override

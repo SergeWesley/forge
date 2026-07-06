@@ -29,17 +29,26 @@ public class AnimeController {
 
     @GetMapping("/random")
     @Operation(
-        summary = "api.anime.get.summary", 
-        description = "api.anime.get.desc",
-        tags = {"Generative UI"},
-        extensions = {@Extension(name = "x-generative-ui", properties = {@ExtensionProperty(name = "enabled", value = "true")})}
-    )
+            summary = "api.anime.get.summary",
+            description = "api.anime.get.desc",
+            tags = {"Generative UI"},
+            extensions = {
+                @Extension(
+                        name = "x-generative-ui",
+                        properties = {@ExtensionProperty(name = "enabled", value = "true")})
+            })
     public ResponseEntity<JikanAnimeResponse.AnimeData> getRandomAnime() {
-        return jikanService.getRandomAnime()
+        return jikanService
+                .getRandomAnime()
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> {
-                    String errorMessage = messageSource.getMessage("error.anime.unavailable", null, LocaleContextHolder.getLocale());
-                    return new ExternalServiceException(errorMessage);
-                });
+                .orElseThrow(
+                        () -> {
+                            String errorMessage =
+                                    messageSource.getMessage(
+                                            "error.anime.unavailable",
+                                            null,
+                                            LocaleContextHolder.getLocale());
+                            return new ExternalServiceException(errorMessage);
+                        });
     }
 }

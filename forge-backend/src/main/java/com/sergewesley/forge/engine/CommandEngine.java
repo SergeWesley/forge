@@ -3,14 +3,12 @@ package com.sergewesley.forge.engine;
 import com.sergewesley.forge.dto.CommandResponse;
 import com.sergewesley.forge.service.command.api.Command;
 import com.sergewesley.forge.service.command.api.SessionAwareCommand;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CommandEngine {
@@ -36,7 +34,8 @@ public class CommandEngine {
         }
 
         // Intercept if user is in chat mode
-        Optional<CommandResponse> intercepted = chatModeInterceptor.intercept(commandLine, principalName);
+        Optional<CommandResponse> intercepted =
+                chatModeInterceptor.intercept(commandLine, principalName);
         if (intercepted.isPresent()) {
             return intercepted.get();
         }

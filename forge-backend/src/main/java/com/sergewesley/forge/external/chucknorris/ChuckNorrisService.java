@@ -2,11 +2,10 @@ package com.sergewesley.forge.external.chucknorris;
 
 import com.sergewesley.forge.dto.chucknorris.ChuckNorrisResponse;
 import com.sergewesley.forge.external.BaseExternalService;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -21,10 +20,9 @@ public class ChuckNorrisService extends BaseExternalService {
         return executeGetCall(
                 url,
                 ChuckNorrisResponse.class,
-                ChuckNorrisResponse::getValue,
-                "Appel de l'API Chuck Norris...",
+                ChuckNorrisResponse::value,
+                "Récupération d'une blague Chuck Norris",
                 "Erreur lors de la récupération de la blague Chuck Norris",
-                log
-        );
+                log);
     }
 }

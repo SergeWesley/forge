@@ -5,8 +5,8 @@ import com.sergewesley.forge.service.command.api.SessionAwareCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Abstract base class for all chat-related commands.
- * Provides common functionality and access to the ChatEngine.
+ * Abstract base class for all chat-related commands. Provides common functionality and access to
+ * the ChatEngine.
  */
 public abstract class AbstractChatCommand implements SessionAwareCommand {
 
@@ -24,7 +24,7 @@ public abstract class AbstractChatCommand implements SessionAwareCommand {
 
     /**
      * Returns the usage string for this command (arguments only).
-     * 
+     *
      * @return Usage string without the command name
      */
     protected abstract String getUsage();

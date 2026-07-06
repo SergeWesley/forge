@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.extensions.Extension;
 import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/art")
@@ -33,20 +32,30 @@ public class ArtController {
 
     @GetMapping("/search")
     @Operation(
-        summary = "api.art.search.summary", 
-        description = "api.art.search.desc",
-        tags = {"Generative UI"},
-        extensions = {@Extension(name = "x-generative-ui", properties = {@ExtensionProperty(name = "enabled", value = "true")})}
-    )
+            summary = "api.art.search.summary",
+            description = "api.art.search.desc",
+            tags = {"Generative UI"},
+            extensions = {
+                @Extension(
+                        name = "x-generative-ui",
+                        properties = {@ExtensionProperty(name = "enabled", value = "true")})
+            })
     public ResponseEntity<List<ArtItem>> searchArt(
-            @Parameter(description = "api.art.param.query", required = true, example = "Van Gogh") 
-            @RequestParam String query) {
-            
-        return artService.searchArt(query)
+            @Parameter(description = "api.art.param.query", required = true, example = "Van Gogh")
+                    @RequestParam
+                    String query) {
+
+        return artService
+                .searchArt(query)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> {
-                    String errorMessage = messageSource.getMessage("error.art.unavailable", null, LocaleContextHolder.getLocale());
-                    return new ExternalServiceException(errorMessage);
-                });
+                .orElseThrow(
+                        () -> {
+                            String errorMessage =
+                                    messageSource.getMessage(
+                                            "error.art.unavailable",
+                                            null,
+                                            LocaleContextHolder.getLocale());
+                            return new ExternalServiceException(errorMessage);
+                        });
     }
 }

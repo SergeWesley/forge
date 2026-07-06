@@ -6,14 +6,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.extensions.Extension;
 import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Map;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/dogs")
@@ -30,17 +29,26 @@ public class DogController {
 
     @GetMapping("/random")
     @Operation(
-        summary = "api.dog.get.summary", 
-        description = "api.dog.get.desc",
-        tags = {"Generative UI"},
-        extensions = {@Extension(name = "x-generative-ui", properties = {@ExtensionProperty(name = "enabled", value = "true")})}
-    )
+            summary = "api.dog.get.summary",
+            description = "api.dog.get.desc",
+            tags = {"Generative UI"},
+            extensions = {
+                @Extension(
+                        name = "x-generative-ui",
+                        properties = {@ExtensionProperty(name = "enabled", value = "true")})
+            })
     public ResponseEntity<Map<String, String>> getRandomDog() {
-        return dogService.getRandomDogImage()
+        return dogService
+                .getRandomDogImage()
                 .map(imageUrl -> ResponseEntity.ok(Map.of("imageUrl", imageUrl)))
-                .orElseThrow(() -> {
-                    String errorMessage = messageSource.getMessage("error.dog.unavailable", null, LocaleContextHolder.getLocale());
-                    return new ExternalServiceException(errorMessage);
-                });
+                .orElseThrow(
+                        () -> {
+                            String errorMessage =
+                                    messageSource.getMessage(
+                                            "error.dog.unavailable",
+                                            null,
+                                            LocaleContextHolder.getLocale());
+                            return new ExternalServiceException(errorMessage);
+                        });
     }
 }

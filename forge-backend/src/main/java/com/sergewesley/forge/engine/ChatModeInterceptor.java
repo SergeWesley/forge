@@ -1,14 +1,12 @@
 package com.sergewesley.forge.engine;
 
 import com.sergewesley.forge.dto.CommandResponse;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 /**
- * Intercepts command input when a user is in chat mode.
- * Handles chat-specific behavior (/exit, message broadcasting) before
- * commands reach the CommandEngine.
+ * Intercepts command input when a user is in chat mode. Handles chat-specific behavior (/exit,
+ * message broadcasting) before commands reach the CommandEngine.
  */
 @Component
 public class ChatModeInterceptor {
@@ -21,11 +19,10 @@ public class ChatModeInterceptor {
 
     /**
      * Intercepts and processes input if user is in chat mode.
-     * 
-     * @param commandLine   The input line
+     *
+     * @param commandLine The input line
      * @param principalName The user's principal
-     * @return Optional containing the response if handled, empty if should proceed
-     *         to CommandEngine
+     * @return Optional containing the response if handled, empty if should proceed to CommandEngine
      */
     public Optional<CommandResponse> intercept(String commandLine, String principalName) {
         if (principalName == null || !chatEngine.isUserInChat(principalName)) {

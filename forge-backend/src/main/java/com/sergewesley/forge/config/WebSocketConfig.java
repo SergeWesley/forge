@@ -21,21 +21,24 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
                 .setAllowedOrigins("*")
-                .setHandshakeHandler(new org.springframework.web.socket.server.support.DefaultHandshakeHandler() {
-                    @Override
-                    protected java.security.Principal determineUser(
-                            org.springframework.http.server.ServerHttpRequest request,
-                            org.springframework.web.socket.WebSocketHandler wsHandler,
-                            java.util.Map<String, Object> attributes) {
-                        return new java.security.Principal() {
-                            private final String name = java.util.UUID.randomUUID().toString();
-
+                .setHandshakeHandler(
+                        new org.springframework.web.socket.server.support
+                                .DefaultHandshakeHandler() {
                             @Override
-                            public String getName() {
-                                return this.name;
+                            protected java.security.Principal determineUser(
+                                    org.springframework.http.server.ServerHttpRequest request,
+                                    org.springframework.web.socket.WebSocketHandler wsHandler,
+                                    java.util.Map<String, Object> attributes) {
+                                return new java.security.Principal() {
+                                    private final String name =
+                                            java.util.UUID.randomUUID().toString();
+
+                                    @Override
+                                    public String getName() {
+                                        return this.name;
+                                    }
+                                };
                             }
-                        };
-                    }
-                });
+                        });
     }
 }

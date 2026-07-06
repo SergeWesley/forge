@@ -11,5 +11,4 @@ public class ForgeApplication {
     public static void main(String[] args) {
         SpringApplication.run(ForgeApplication.class, args);
     }
-
 }

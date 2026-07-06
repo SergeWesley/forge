@@ -5,9 +5,8 @@ import java.util.List;
 
 public record ArtResponse(List<ArtData> data) {
     public record ArtData(
-        Long id,
-        String title,
-        @JsonProperty("artist_title") String artistTitle,
-        @JsonProperty("image_id") String imageId
-    ) {}
+            Long id,
+            String title,
+            @JsonProperty("artist_title") String artistTitle,
+            @JsonProperty("image_id") String imageId) {}
 }

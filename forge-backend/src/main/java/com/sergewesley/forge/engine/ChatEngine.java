@@ -1,12 +1,11 @@
 package com.sergewesley.forge.engine;
 
 import com.sergewesley.forge.dto.CommandResponse;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class ChatEngine {
@@ -75,10 +74,7 @@ public class ChatEngine {
             for (String participant : participants) {
                 // Don't echo back to sender if you want, but typical chat shows your own msg
                 // Here we send to everyone
-                messagingTemplate.convertAndSendToUser(
-                        participant,
-                        "/queue/terminal",
-                        response);
+                messagingTemplate.convertAndSendToUser(participant, "/queue/terminal", response);
             }
         }
     }
@@ -96,9 +92,7 @@ public class ChatEngine {
                 // Don't send typing events back to sender
                 if (!participant.equals(senderPrincipal)) {
                     messagingTemplate.convertAndSendToUser(
-                            participant,
-                            "/queue/typing",
-                            typingData);
+                            participant, "/queue/typing", typingData);
                 }
             }
         }
@@ -106,16 +100,12 @@ public class ChatEngine {
 
     private void broadcastSystemMessage(String roomCode, String message) {
         Set<String> participants = rooms.get(roomCode);
-        if (participants == null)
-            return;
+        if (participants == null) return;
 
         CommandResponse response = new CommandResponse("[SYSTEM]: " + message, "system");
 
         for (String participant : participants) {
-            messagingTemplate.convertAndSendToUser(
-                    participant,
-                    "/queue/terminal",
-                    response);
+            messagingTemplate.convertAndSendToUser(participant, "/queue/terminal", response);
         }
     }
 
