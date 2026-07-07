@@ -31,8 +31,12 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleExternalServiceException(ExternalServiceException ex) {
         // Renvoie un 503 (Service Unavailable) car le service externe est indisponible
         String detailMessage =
-                messageSource.getMessage(
-                        "error.detail.externalservice", null, LocaleContextHolder.getLocale());
+                ex.getMessage() != null && !ex.getMessage().isBlank()
+                        ? ex.getMessage()
+                        : messageSource.getMessage(
+                                "error.detail.externalservice",
+                                null,
+                                LocaleContextHolder.getLocale());
         ProblemDetail problemDetail =
                 ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, detailMessage);
         problemDetail.setTitle(
