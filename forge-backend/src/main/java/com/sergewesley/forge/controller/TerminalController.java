@@ -6,7 +6,6 @@ import com.sergewesley.forge.dto.TypingEvent;
 import com.sergewesley.forge.engine.ChatEngine;
 import com.sergewesley.forge.engine.CommandEngine;
 import java.security.Principal;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 // import org.springframework.messaging.handler.annotation.SendTo;
@@ -18,7 +17,6 @@ public class TerminalController {
     private final CommandEngine commandEngine;
     private final ChatEngine chatEngine;
 
-    @Autowired
     public TerminalController(CommandEngine commandEngine, ChatEngine chatEngine) {
         this.commandEngine = commandEngine;
         this.chatEngine = chatEngine;

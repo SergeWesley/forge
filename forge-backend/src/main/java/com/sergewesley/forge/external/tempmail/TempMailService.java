@@ -29,7 +29,8 @@ public class TempMailService extends BaseExternalService {
 
     public Optional<TempMailListResponse> checkEmails(String sidToken) {
         String url =
-                "https://api.guerrillamail.com/ajax.php?f=get_email_list&offset=0&sid_token=" + sidToken;
+                "https://api.guerrillamail.com/ajax.php?f=get_email_list&offset=0&sid_token="
+                        + sidToken;
         return executeGetCall(
                 url,
                 TempMailListResponse.class,
