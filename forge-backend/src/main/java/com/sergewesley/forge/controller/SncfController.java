@@ -2,6 +2,7 @@ package com.sergewesley.forge.controller;
 
 import com.sergewesley.forge.dto.sncf.SncfArrivalResponse;
 import com.sergewesley.forge.dto.sncf.SncfDepartureResponse;
+import com.sergewesley.forge.dto.sncf.SncfJourneyResponse;
 import com.sergewesley.forge.dto.sncf.SncfStationDto;
 import com.sergewesley.forge.exception.ResourceNotFoundException;
 import com.sergewesley.forge.external.sncf.SncfService;
@@ -103,6 +104,69 @@ public class SncfController {
                                         messageSource.getMessage(
                                                 "error.sncf.arrivals.unavailable",
                                                 new Object[] {station},
+                                                LocaleContextHolder.getLocale())));
+    }
+
+    @GetMapping("/journeys")
+    @Operation(
+            summary = "api.sncf.journeys.summary",
+            description = "api.sncf.journeys.desc",
+            tags = {"Generative UI"},
+            extensions = {
+                @Extension(
+                        name = "x-generative-ui",
+                        properties = {@ExtensionProperty(name = "enabled", value = "true")})
+            })
+    public SncfJourneyResponse getJourneys(
+            @Parameter(description = "api.sncf.param.from", required = true) @RequestParam
+                    String from,
+            @Parameter(description = "api.sncf.param.to", required = true) @RequestParam String to,
+            @Parameter(description = "api.sncf.param.datetime", required = false)
+                    @RequestParam(required = false)
+                    String datetime,
+            @Parameter(description = "api.sncf.param.datetime_represents", required = false)
+                    @RequestParam(required = false, defaultValue = "departure")
+                    String datetimeRepresents) {
+
+        // 1. Résoudre le nom des gares en ID Navitia
+        SncfStationDto resolvedFrom =
+                sncfService
+                        .searchStation(from)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                messageSource.getMessage(
+                                                        "error.sncf.station.notfound",
+                                                        new Object[] {from},
+                                                        LocaleContextHolder.getLocale())));
+
+        SncfStationDto resolvedTo =
+                sncfService
+                        .searchStation(to)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                messageSource.getMessage(
+                                                        "error.sncf.station.notfound",
+                                                        new Object[] {to},
+                                                        LocaleContextHolder.getLocale())));
+
+        // 2. Formater la date (ex: 2026-07-11T14:30:00 -> 20260711T143000)
+        String navitiaDatetime = null;
+        if (datetime != null) {
+            navitiaDatetime = datetime.replace("-", "").replace(":", "");
+        }
+
+        // 3. Récupérer les itinéraires
+        return sncfService
+                .getJourneys(
+                        resolvedFrom.id(), resolvedTo.id(), navitiaDatetime, datetimeRepresents)
+                .orElseThrow(
+                        () ->
+                                new ResourceNotFoundException(
+                                        messageSource.getMessage(
+                                                "error.sncf.journeys.unavailable",
+                                                new Object[] {from, to},
                                                 LocaleContextHolder.getLocale())));
     }
 }

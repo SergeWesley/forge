@@ -2,9 +2,11 @@ package com.sergewesley.forge.external.sncf;
 
 import com.sergewesley.forge.dto.sncf.NavitiaArrivalsResponse;
 import com.sergewesley.forge.dto.sncf.NavitiaDeparturesResponse;
+import com.sergewesley.forge.dto.sncf.NavitiaJourneysResponse;
 import com.sergewesley.forge.dto.sncf.NavitiaPlacesResponse;
 import com.sergewesley.forge.dto.sncf.SncfArrivalResponse;
 import com.sergewesley.forge.dto.sncf.SncfDepartureResponse;
+import com.sergewesley.forge.dto.sncf.SncfJourneyResponse;
 import com.sergewesley.forge.dto.sncf.SncfStationDto;
 import com.sergewesley.forge.external.BaseExternalService;
 import java.nio.charset.StandardCharsets;
@@ -106,6 +108,39 @@ public class SncfService extends BaseExternalService {
                 NavitiaArrivalsResponse::toArrivalResponse,
                 "Récupération des arrivées pour la gare : " + stopAreaId,
                 "Erreur lors de la récupération des arrivées SNCF",
+                log);
+    }
+
+    /**
+     * Récupère les itinéraires entre deux gares à une date donnée.
+     *
+     * @param fromId L'identifiant Navitia de la gare de départ
+     * @param toId L'identifiant Navitia de la gare d'arrivée
+     * @param datetime La date au format Navitia (ex: 20260711T143000), optionnel
+     * @param datetimeRepresents "departure" ou "arrival"
+     */
+    public Optional<SncfJourneyResponse> getJourneys(
+            String fromId, String toId, String datetime, String datetimeRepresents) {
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromUriString(SNCF_BASE_URL + "/journeys")
+                        .queryParam("from", fromId)
+                        .queryParam("to", toId);
+
+        if (datetime != null && !datetime.isEmpty()) {
+            builder.queryParam("datetime", datetime);
+        }
+        if (datetimeRepresents != null && !datetimeRepresents.isEmpty()) {
+            builder.queryParam("datetime_represents", datetimeRepresents);
+        }
+
+        return executeExchangeCall(
+                builder.toUriString(),
+                HttpMethod.GET,
+                buildAuthEntity(),
+                NavitiaJourneysResponse.class,
+                NavitiaJourneysResponse::toJourneyResponse,
+                "Recherche d'itinéraire SNCF de " + fromId + " à " + toId,
+                "Erreur lors de la recherche d'itinéraire SNCF",
                 log);
     }
 
