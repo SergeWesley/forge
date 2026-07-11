@@ -10,5 +10,4 @@ public record McuCountdownResponse(
         @JsonProperty("days_until") Integer daysUntil,
         String overview,
         @JsonProperty("poster_url") String posterUrl,
-        @JsonProperty("following_production") McuProduction followingProduction
-) {}
+        @JsonProperty("following_production") McuProduction followingProduction) {}

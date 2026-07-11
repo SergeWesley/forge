@@ -34,3 +34,4 @@ build/
 
 ### Custom ###
 logs/
+src/main/resources/application-local.properties

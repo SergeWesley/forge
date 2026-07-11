@@ -9,5 +9,4 @@ public record McuProduction(
         @JsonProperty("release_date") String releaseDate,
         @JsonProperty("days_until") Integer daysUntil,
         String overview,
-        @JsonProperty("poster_url") String posterUrl
-) {}
+        @JsonProperty("poster_url") String posterUrl) {}
