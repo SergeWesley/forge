@@ -49,7 +49,7 @@ public class SncfService extends BaseExternalService {
                 UriComponentsBuilder.fromUriString(SNCF_BASE_URL + "/places")
                         .queryParam("q", query)
                         .queryParam("type[]", "stop_area")
-                        .queryParam("count", 1)
+                        .queryParam("count", 10)
                         .toUriString();
 
         return executeExchangeCall(
