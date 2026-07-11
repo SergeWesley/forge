@@ -3,7 +3,6 @@ package com.sergewesley.forge.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +15,7 @@ public class KeepAliveService {
     @Value("${app.public.url:https://forge-v1ui.onrender.com}")
     private String appPublicUrl;
 
-    @Scheduled(fixedRate = 60000) // Runs every 60 seconds
+    // @Scheduled(fixedRate = 60000) // Runs every 60 seconds
     public void pingSelf() {
         String healthUrl = appPublicUrl + "/health";
         try {
